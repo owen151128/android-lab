@@ -15,10 +15,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun WaterCounter(modifier: Modifier = Modifier) {
     Column(modifier.padding(16.dp)) {
-        // Changes to count are now tracked by Compose
         var count by remember { mutableStateOf(0) }
-        Text("You' ve had $count classes.", modifier.padding(16.dp))
-        Button({ count++ }, Modifier.padding(top = 8.dp)) {
+        if (count > 0) {
+            Text("You've had $count glasses.", modifier.padding(16.dp))
+        }
+        Button({ count++ }, Modifier.padding(top = 8.dp), enabled = count < 10) {
             Text("Add one")
         }
     }
