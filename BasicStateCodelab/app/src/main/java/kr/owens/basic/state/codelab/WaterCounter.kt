@@ -8,8 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,13 +22,6 @@ fun StatelessCounter(
 ) {
     Column(modifier.padding(16.dp)) {
         if (count > 0) {
-            var showTask by remember { mutableStateOf(true) }
-            if (showTask) {
-                WellnessTaskItem(
-                    "Have you taken your 15 minute walk today?",
-                    { showTask = false }
-                )
-            }
             Text("You've had $count glasses.", Modifier.padding(16.dp))
         }
         Row(Modifier.padding(top = 8.dp)) {
