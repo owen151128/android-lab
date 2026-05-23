@@ -20,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import kr.owens.basic.state.codelab.ui.theme.BasicStateCodelabTheme
 
 @Composable
-fun WellnessTaskItem(taskName: String, modifier: Modifier = Modifier) {
+fun WellnessTaskItem(taskName: String, onClose: () -> Unit, modifier: Modifier = Modifier) {
     var checkedState by rememberSaveable { mutableStateOf(false) }
     WellnessTaskItem(
         taskName,
         checkedState,
         { newValue -> checkedState = newValue },
-        {},
+        onClose,
         modifier
     )
 }
@@ -56,6 +56,6 @@ fun WellnessTaskItem(
 @Composable
 fun WellnessTaskItemPreview() {
     BasicStateCodelabTheme {
-        WellnessTaskItem("This is a task")
+        WellnessTaskItem("This is a task", {})
     }
 }
