@@ -48,11 +48,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import kr.owens.phase1.todo.data.TodoItem
-import kr.owens.phase1.todo.ui.theme.Phase1todoTheme
+import kr.owens.phase1.todo.ui.theme.Phase2todoTheme
 import java.util.UUID
 
 class MainActivity : ComponentActivity() {
@@ -61,7 +60,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var isDarkTheme by rememberSaveable { mutableStateOf(false) }
-            Phase1todoTheme(darkTheme = isDarkTheme) {
+            Phase2todoTheme(darkTheme = isDarkTheme) {
                 TodoScreen(isDarkTheme, { isDarkTheme = !isDarkTheme })
             }
         }
@@ -254,7 +253,7 @@ fun AddTodoDialog(
 @PreviewLightDark
 @Composable
 private fun AddTodoDialogPreview() {
-    Phase1todoTheme {
+    Phase2todoTheme {
         val todoContent = rememberTextFieldState("")
         AddTodoDialog(todoContent, {}, {})
     }
@@ -269,7 +268,7 @@ private fun TodoScreenPreview() {
     val previewItems = List(40) {
         TodoItem(UUID.randomUUID().toString(), "test$it", it % 2 == 0)
     }.toMutableStateList()
-    Phase1todoTheme {
+    Phase2todoTheme {
         if (showAddTodoDialog) {
             AddTodoDialog(
                 todoContent,
