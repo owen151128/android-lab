@@ -210,7 +210,7 @@ fun TodoScreen(
     var showAddDialog by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton({ showAddDialog = true }, modifier) {
+            FloatingActionButton({ showAddDialog = true }) {
                 Icon(
                     Icons.Filled.Add,
                     "Add Todo"
@@ -221,7 +221,7 @@ fun TodoScreen(
         when (todoUiState) {
             is TodoUiState.Loading -> {
                 LoadingUi(
-                    todoUiState, modifier
+                    todoUiState, Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
                 )
@@ -234,14 +234,14 @@ fun TodoScreen(
                     onDarkThemeSwitchClicked,
                     onToggleCheckBoxClicked,
                     onRemoveButtonClicked,
-                    modifier
+                    Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
                 )
             }
 
             is TodoUiState.Error -> {
-                Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     Text("오류 : ${todoUiState.exception.message}")
                 }
             }
