@@ -8,19 +8,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun TodoRoute(
-    isDarkTheme: Boolean,
-    onDarkThemeSwitchClicked: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TodoViewModel = viewModel(),
 ) {
     val todoUiState by viewModel.uiState.collectAsStateWithLifecycle()
     TodoScreen(
         todoUiState,
-        isDarkTheme,
-        onDarkThemeSwitchClicked,
         viewModel::addTodoItem,
         viewModel::toggleTodoIsDone,
         viewModel::deleteTodoItem,
-        modifier,
+        modifier
     )
 }

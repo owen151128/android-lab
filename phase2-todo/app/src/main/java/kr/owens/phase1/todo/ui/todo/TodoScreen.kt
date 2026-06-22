@@ -4,12 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,11 +22,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue.EndToStart
 import androidx.compose.material3.SwipeToDismissBoxValue.Settled
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -152,7 +149,7 @@ private fun LoadingUi(todoUiState: TodoUiState.Loading, modifier: Modifier = Mod
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         Text("Loading... ${todoUiState.count}")
     }
@@ -161,25 +158,18 @@ private fun LoadingUi(todoUiState: TodoUiState.Loading, modifier: Modifier = Mod
 @Composable
 private fun TodoScreen(
     todoItemList: List<TodoItem>,
-    isDarkTheme: Boolean,
-    onDarkThemeSwitchClicked: () -> Unit,
+    onAddDialogSubmit: (String) -> Unit,
     onToggleCheckboxClicked: (TodoItem) -> Unit,
     onDeleteButtonClicked: (TodoItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Dark Mode")
-            Spacer(Modifier.width(8.dp))
-            Switch(isDarkTheme, { onDarkThemeSwitchClicked() })
-            Spacer(Modifier.width(8.dp))
-        }
-        if (!todoItemList.isEmpty()) {
-            LazyColumn(Modifier.fillMaxWidth()) {
+    var showAddDialog by rememberSaveable { mutableStateOf(false) }
+    Box(modifier.fillMaxSize()) {
+        if (todoItemList.isNotEmpty()) {
+            LazyColumn(
+                Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(bottom = 88.dp)
+            ) {
                 items(todoItemList, key = { it.id }) { todoItem ->
                     TodoListItem(
                         todoItem,
@@ -190,64 +180,49 @@ private fun TodoScreen(
                 }
             }
         } else {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text("할일 없음")
-            }
+            Text("할일 없음", Modifier.align(Alignment.Center))
         }
+        FloatingActionButton(
+            { showAddDialog = true },
+            Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(imageVector = Icons.Filled.Add, contentDescription = "Todo 항목 추가")
+        }
+    }
+    if (showAddDialog) {
+        AddTodoDialog(onAddDialogSubmit, { showAddDialog = false })
     }
 }
 
 @Composable
 fun TodoScreen(
     todoUiState: TodoUiState,
-    isDarkTheme: Boolean,
-    onDarkThemeSwitchClicked: () -> Unit,
     onAddDialogSubmit: (String) -> Unit,
     onToggleCheckBoxClicked: (TodoItem) -> Unit,
     onRemoveButtonClicked: (TodoItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showAddDialog by rememberSaveable { mutableStateOf(false) }
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton({ showAddDialog = true }) {
-                Icon(
-                    Icons.Filled.Add,
-                    "Add Todo"
-                )
-            }
-        }, modifier = modifier.fillMaxSize()
-    ) { innerPadding ->
-        when (todoUiState) {
-            is TodoUiState.Loading -> {
-                LoadingUi(
-                    todoUiState, Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                )
-            }
-
-            is TodoUiState.Success -> {
-                TodoScreen(
-                    todoUiState.todoItemList,
-                    isDarkTheme,
-                    onDarkThemeSwitchClicked,
-                    onToggleCheckBoxClicked,
-                    onRemoveButtonClicked,
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                )
-            }
-
-            is TodoUiState.Error -> {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    Text("오류 : ${todoUiState.exception.message}")
-                }
-            }
+    when (todoUiState) {
+        is TodoUiState.Loading -> {
+            LoadingUi(todoUiState, modifier)
         }
-        if (showAddDialog) {
-            AddTodoDialog(onAddDialogSubmit, { showAddDialog = false })
+
+        is TodoUiState.Success -> {
+            TodoScreen(
+                todoUiState.todoItemList,
+                onAddDialogSubmit,
+                onToggleCheckBoxClicked,
+                onRemoveButtonClicked,
+                modifier
+            )
+        }
+
+        is TodoUiState.Error -> {
+            Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()) {
+                Text("오류 : ${todoUiState.exception.message}")
+            }
         }
     }
 }
@@ -255,12 +230,9 @@ fun TodoScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun TodoScreenLoadingLightPreview() {
-    val isDarkTheme = false
-    Phase2todoTheme(darkTheme = isDarkTheme) {
+    Phase2todoTheme(darkTheme = false) {
         TodoScreen(
             TodoUiState.Loading(999),
-            isDarkTheme,
-            {},
             {},
             {},
             {},
@@ -271,12 +243,9 @@ private fun TodoScreenLoadingLightPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun TodoScreenLoadingDarkPreview() {
-    val isDarkTheme = false
     Phase2todoTheme(darkTheme = true) {
         TodoScreen(
             TodoUiState.Loading(999),
-            isDarkTheme,
-            {},
             {},
             {},
             {},
@@ -293,12 +262,9 @@ class TodoItemProvider : PreviewParameterProvider<List<TodoItem>> {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun TodoScreenSuccessLightPreview(@PreviewParameter(TodoItemProvider::class) previewItems: List<TodoItem>) {
-    val isDarkTheme = false
     Phase2todoTheme(darkTheme = false) {
         TodoScreen(
             TodoUiState.Success(previewItems),
-            isDarkTheme,
-            {},
             {},
             {},
             {},
@@ -309,16 +275,38 @@ private fun TodoScreenSuccessLightPreview(@PreviewParameter(TodoItemProvider::cl
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun TodoScreenSuccessDarkPreview(@PreviewParameter(TodoItemProvider::class) previewItems: List<TodoItem>) {
-    val isDarkTheme = false
     Phase2todoTheme(darkTheme = true) {
         TodoScreen(
             TodoUiState.Success(previewItems),
-            isDarkTheme,
             {},
             {},
             {},
-            {},
-
             )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun TodoScreenErrorLightPreview() {
+    Phase2todoTheme(darkTheme = false) {
+        TodoScreen(
+            TodoUiState.Error(RuntimeException("error test!")),
+            {},
+            {},
+            {},
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun TodoScreenErrorDarkPreview() {
+    Phase2todoTheme(darkTheme = true) {
+        TodoScreen(
+            TodoUiState.Error(RuntimeException("error test!")),
+            {},
+            {},
+            {},
+        )
     }
 }
