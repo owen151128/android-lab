@@ -2,6 +2,7 @@ package kr.owens.phase1.todo.ui.todo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,19 +27,25 @@ class TodoViewModel : ViewModel() {
         }
 
     private fun loadTodoItemList() = viewModelScope.launch {
-        repeat(5) { count ->
-            _uiState.update { TodoUiState.Loading(count + 1) }
-            delay(500L)
-        }
-        _uiState.update {
-            TodoUiState.Success(emptyList())
+        try {
+            repeat(5) { count ->
+                _uiState.update { TodoUiState.Loading(count + 1) }
+                delay(500L)
+            }
+            _uiState.update {
+                TodoUiState.Success(emptyList())
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            _uiState.update { TodoUiState.Error(e) }
         }
     }
 
     fun addTodoItem(text: String) = updateTodoItemList { it + TodoItem(text = text) }
 
     fun toggleTodoIsDone(todoItem: TodoItem) = updateTodoItemList { list ->
-        list.map { if (it.id == todoItem.id) it.copy(isDone = !todoItem.isDone) else it }
+        list.map { if (it.id == todoItem.id) it.copy(isDone = !it.isDone) else it }
     }
 
     fun deleteTodoItem(todoItem: TodoItem) = updateTodoItemList { list ->

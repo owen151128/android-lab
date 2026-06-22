@@ -31,7 +31,6 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,7 +50,7 @@ private fun AddTodoDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var attemptedSubmit by remember { mutableStateOf(false) }
+    var attemptedSubmit by rememberSaveable { mutableStateOf(false) }
     val todoContent = rememberTextFieldState()
     val isError = attemptedSubmit && todoContent.text.isBlank()
 
@@ -156,7 +155,7 @@ private fun LoadingUi(todoUiState: TodoUiState.Loading, modifier: Modifier = Mod
 }
 
 @Composable
-private fun TodoScreen(
+private fun TodoContent(
     todoItemList: List<TodoItem>,
     onAddDialogSubmit: (String) -> Unit,
     onToggleCheckboxClicked: (TodoItem) -> Unit,
@@ -210,7 +209,7 @@ fun TodoScreen(
         }
 
         is TodoUiState.Success -> {
-            TodoScreen(
+            TodoContent(
                 todoUiState.todoItemList,
                 onAddDialogSubmit,
                 onToggleCheckBoxClicked,
