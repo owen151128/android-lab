@@ -1,6 +1,6 @@
-package kr.owens.phase1.todo.ui.todo
+package kr.owens.phase2.todo.ui.todo
 
-import kr.owens.phase1.todo.data.TodoItem
+import kr.owens.phase2.todo.data.TodoItem
 
 sealed interface TodoUiState {
     data class Loading(val count: Int) : TodoUiState

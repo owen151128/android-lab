@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "kr.owens.phase1.todo"
+    namespace = "kr.owens.phase2.todo"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "kr.owens.phase1.todo"
+        applicationId = "kr.owens.phase2.todo"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

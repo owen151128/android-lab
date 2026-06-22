@@ -1,4 +1,4 @@
-package kr.owens.phase1.todo.ui.todo
+package kr.owens.phase2.todo.ui.todo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,8 +41,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import kr.owens.phase1.todo.data.TodoItem
-import kr.owens.phase1.todo.ui.theme.Phase2todoTheme
+import kr.owens.phase2.todo.data.TodoItem
+import kr.owens.phase2.todo.ui.theme.Phase2todoTheme
 
 @Composable
 private fun AddTodoDialog(

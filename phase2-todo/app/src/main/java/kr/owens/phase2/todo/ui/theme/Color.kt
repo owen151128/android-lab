@@ -1,4 +1,4 @@
-package kr.owens.phase1.todo.ui.theme
+package kr.owens.phase2.todo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package kr.owens.phase1.todo.ui
+package kr.owens.phase2.todo.ui
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +16,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kr.owens.phase1.todo.ui.theme.Phase2todoTheme
-import kr.owens.phase1.todo.ui.todo.TodoRoute
+import kr.owens.phase2.todo.ui.theme.Phase2todoTheme
+import kr.owens.phase2.todo.ui.todo.TodoRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

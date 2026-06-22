@@ -1,4 +1,4 @@
-package kr.owens.phase1.todo.ui.todo
+package kr.owens.phase2.todo.ui.todo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kr.owens.phase1.todo.data.TodoItem
+import kr.owens.phase2.todo.data.TodoItem
 
 class TodoViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<TodoUiState>(TodoUiState.Loading(0))

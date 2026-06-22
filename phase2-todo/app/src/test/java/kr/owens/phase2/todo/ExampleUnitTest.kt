@@ -1,4 +1,4 @@
-package kr.owens.phase1.todo
+package kr.owens.phase2.todo
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package kr.owens.phase1.todo.ui.todo
+package kr.owens.phase2.todo.ui.todo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
